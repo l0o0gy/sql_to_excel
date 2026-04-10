@@ -1,0 +1,381 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;direction:rtl;background:var(--color-background-tertiary);display:flex;justify-content:center;padding:2rem 1rem}
+.phone{width:390px;min-height:780px;background:var(--color-background-primary);border-radius:40px;border:1px solid var(--color-border-secondary);overflow:hidden;display:flex;flex-direction:column}
+.status-bar{background:#0F6E56;padding:12px 24px 10px;display:flex;justify-content:space-between;align-items:center}
+.status-bar .time{color:#fff;font-size:15px;font-weight:600}
+.status-icons{display:flex;gap:5px;align-items:center}
+.status-icons svg{width:14px;height:14px;fill:#fff}
+.app-header{background:#0F6E56;padding:0 20px 18px;display:flex;align-items:center;gap:12px}
+.app-header .app-icon{width:38px;height:38px;background:#1D9E75;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.app-header .app-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
+.app-header h1{font-size:18px;font-weight:600;color:#fff}
+.app-header p{font-size:11px;color:#9FE1CB;margin-top:1px}
+.tabs{background:#0F6E56;display:flex;padding:0 16px;border-bottom:none}
+.tab{flex:1;padding:10px 0 12px;text-align:center;font-size:13px;font-weight:500;color:#9FE1CB;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s}
+.tab.active{color:#fff;border-bottom-color:#fff}
+.screen{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.panel{flex:1;overflow-y:auto;padding:16px;display:none;flex-direction:column;gap:12px}
+.panel.active{display:flex}
+.upload-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:16px;overflow:hidden}
+.drop-area{border:1.5px dashed var(--color-border-secondary);border-radius:12px;margin:14px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s}
+.drop-area:hover,.drop-area.over{border-color:#1D9E75;background:#E1F5EE}
+.drop-icon{width:44px;height:44px;background:#E1F5EE;border-radius:12px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
+.drop-icon svg{width:22px;height:22px;stroke:#0F6E56;fill:none;stroke-width:2}
+.drop-area h3{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.drop-area p{font-size:12px;color:var(--color-text-secondary)}
+.browse-lnk{color:#0F6E56;font-weight:500;text-decoration:underline;cursor:pointer}
+input[type=file]{display:none}
+.file-strip{display:none;align-items:center;gap:10px;padding:10px 14px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary)}
+.ficon{width:36px;height:36px;background:#FAEEDA;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ficon svg{width:18px;height:18px;stroke:#854F0B;fill:none;stroke-width:2}
+.fmeta{flex:1;min-width:0}
+.fname{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsize{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.xbtn{width:26px;height:26px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--color-text-secondary)}
+.xbtn:hover{background:#FCEBEB;color:#E24B4A}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-box{background:var(--color-background-secondary);border-radius:10px;padding:10px 8px;text-align:center}
+.stat-n{font-size:20px;font-weight:600;color:var(--color-text-primary)}
+.stat-l{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.tables-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:16px;padding:14px}
+.section-lbl{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:#E1F5EE;color:#085041;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:500}
+.convert-btn{width:100%;padding:14px;background:#0F6E56;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;display:none;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:opacity .15s}
+.convert-btn:hover{opacity:.88}
+.convert-btn:disabled{opacity:.5;cursor:not-allowed}
+.convert-btn svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5}
+.prog-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:16px;padding:16px;display:none}
+.prog-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
+.prog-lbl{color:var(--color-text-secondary)}
+.prog-pct{font-weight:500;color:var(--color-text-primary)}
+.prog-track{height:6px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:#1D9E75;border-radius:3px;transition:width .3s;width:0}
+.success-card{background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:16px;padding:16px;display:none;text-align:center}
+.check-circle{width:44px;height:44px;background:#0F6E56;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.check-circle svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.5}
+.success-card h3{font-size:15px;font-weight:600;color:#085041;margin-bottom:4px}
+.success-card p{font-size:12px;color:#0F6E56;margin-bottom:14px}
+.dl-btn{background:#085041;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+.dl-btn svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
+.dl-btn:hover{opacity:.85}
+.err-card{background:#FCEBEB;border:0.5px solid #F09595;border-radius:16px;padding:14px;display:none;font-size:13px;color:#791F1F}
+.sheets-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:16px;padding:14px;display:none}
+.sheet-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sheet-row:last-child{border-bottom:none;padding-bottom:0}
+.sdot{width:8px;height:8px;border-radius:50%;background:#1D9E75;flex-shrink:0}
+.sname{flex:1;font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.srows{font-size:12px;color:var(--color-text-secondary)}
+.hist-panel{flex:1;overflow-y:auto;padding:16px;display:none;flex-direction:column;gap:10px}
+.hist-panel.active{display:flex}
+.empty-hist{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px 0}
+.empty-hist .eicon{width:56px;height:56px;background:var(--color-background-secondary);border-radius:16px;display:flex;align-items:center;justify-content:center}
+.empty-hist .eicon svg{width:26px;height:26px;stroke:var(--color-text-secondary);fill:none;stroke-width:1.5}
+.empty-hist p{font-size:14px;color:var(--color-text-secondary);text-align:center;max-width:200px;line-height:1.5}
+.hist-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px}
+.hist-ficon{width:40px;height:40px;background:#E1F5EE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hist-ficon svg{width:20px;height:20px;stroke:#0F6E56;fill:none;stroke-width:2}
+.hist-meta{flex:1;min-width:0}
+.hist-name{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-info{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.hist-dl{width:34px;height:34px;border-radius:8px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.hist-dl:hover{background:#E1F5EE;border-color:#5DCAA5}
+.hist-dl svg{width:16px;height:16px;stroke:#0F6E56;fill:none;stroke-width:2}
+.hist-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.hist-count{font-size:12px;color:var(--color-text-secondary)}
+.clear-btn{font-size:12px;color:#A32D2D;background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+.clear-btn:hover{text-decoration:underline}
+.bottom-nav{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);display:flex;padding:8px 0 16px}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;border:none;background:transparent;transition:all .15s}
+.nav-btn svg{width:22px;height:22px;stroke:var(--color-text-secondary);fill:none;stroke-width:1.8;transition:stroke .15s}
+.nav-btn span{font-size:11px;color:var(--color-text-secondary);font-family:inherit;transition:color .15s}
+.nav-btn.active svg{stroke:#0F6E56}
+.nav-btn.active span{color:#0F6E56;font-weight:500}
+.badge{background:#E24B4A;color:#fff;font-size:10px;font-weight:600;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;display:none}
+</style>
+
+<div class="phone">
+  <div class="status-bar">
+    <span class="time" id="clockTime">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.56 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="2"/><path d="M22 11V13"/></svg>
+    </div>
+  </div>
+
+  <div class="app-header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+    </div>
+    <div>
+      <h1>SQL → Excel</h1>
+      <p>محوّل الملفات الذكي</p>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="panel active" id="panelConvert">
+
+      <div class="upload-card">
+        <div class="drop-area" id="dropZone">
+          <div class="drop-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h3>اسحب ملف SQL هنا</h3>
+          <p>أو <span class="browse-lnk" onclick="document.getElementById('sqlFile').click()">اختر من جهازك</span></p>
+          <p style="font-size:11px;color:var(--color-text-secondary);margin-top:6px">يدعم ملفات .sql</p>
+        </div>
+        <div class="file-strip" id="fileStrip">
+          <div class="ficon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="fmeta">
+            <div class="fname" id="fName">-</div>
+            <div class="fsize" id="fSize">-</div>
+          </div>
+          <button class="xbtn" onclick="resetAll()">×</button>
+        </div>
+      </div>
+      <input type="file" id="sqlFile" accept=".sql,.txt">
+
+      <div class="stats-row" id="statsRow" style="display:none">
+        <div class="stat-box"><div class="stat-n" id="sT">0</div><div class="stat-l">جدول</div></div>
+        <div class="stat-box"><div class="stat-n" id="sR">0</div><div class="stat-l">صف</div></div>
+        <div class="stat-box"><div class="stat-n" id="sC">0</div><div class="stat-l">عمود</div></div>
+      </div>
+
+      <div class="tables-card" id="tablesCard" style="display:none">
+        <div class="section-lbl">الجداول المكتشفة</div>
+        <div class="tags" id="tagsBox"></div>
+      </div>
+
+      <button class="convert-btn" id="cvtBtn" onclick="doConvert()">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        تحويل إلى Excel
+      </button>
+
+      <div class="prog-card" id="progCard">
+        <div class="prog-top"><span class="prog-lbl" id="progLbl">جاري التحويل...</span><span class="prog-pct" id="progPct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+      </div>
+
+      <div class="sheets-card" id="sheetsCard">
+        <div class="section-lbl">الشيتات في الملف</div>
+        <div id="sheetsList"></div>
+      </div>
+
+      <div class="success-card" id="successCard">
+        <div class="check-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3>تم التحويل بنجاح!</h3>
+        <p id="successMsg">ملف Excel جاهز للتحميل</p>
+        <button class="dl-btn" id="dlBtn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          تحميل الملف
+        </button>
+      </div>
+
+      <div class="err-card" id="errCard"></div>
+    </div>
+
+    <div class="hist-panel" id="panelHistory">
+      <div id="histEmpty" class="empty-hist">
+        <div class="eicon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/></svg>
+        </div>
+        <p>لا يوجد ملفات محولة بعد. ارفع ملف SQL وحوّله!</p>
+      </div>
+      <div id="histHeader" class="hist-header" style="display:none">
+        <span class="hist-count" id="histCount">0 ملف</span>
+        <button class="clear-btn" onclick="clearHistory()">مسح الكل</button>
+      </div>
+      <div id="histList"></div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="navConvert" onclick="switchTab('convert')">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span>تحويل</span>
+    </button>
+    <button class="nav-btn" id="navHistory" onclick="switchTab('history')">
+      <svg viewBox="0 0 24 24"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4.08"/><polyline points="3 3 3 9 9 9"/></svg>
+      <span>السجل</span>
+      <span class="badge" id="histBadge"></span>
+    </button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+let parsed = null, xlsxBlob = null, currentName = '';
+const history = [];
+
+function clockTick() {
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  document.getElementById('clockTime').textContent = h + ':' + String(m).padStart(2,'0');
+}
+clockTick(); setInterval(clockTick, 10000);
+
+function switchTab(t) {
+  document.getElementById('panelConvert').classList.toggle('active', t==='convert');
+  document.getElementById('panelHistory').classList.toggle('active', t==='history');
+  document.getElementById('navConvert').classList.toggle('active', t==='convert');
+  document.getElementById('navHistory').classList.toggle('active', t==='history');
+  if(t==='history') { document.getElementById('histBadge').style.display='none'; renderHistory(); }
+}
+
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', ()=>dz.classList.remove('over'));
+dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('over'); const f=e.dataTransfer.files[0]; if(f) handleFile(f); });
+document.getElementById('sqlFile').addEventListener('change', e=>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
+
+function handleFile(file) {
+  if(!file.name.match(/\.(sql|txt)$/i)) { showErr('الرجاء رفع ملف SQL فقط'); return; }
+  currentName = file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('fName').textContent = file.name;
+  document.getElementById('fSize').textContent = fmtSize(file.size);
+  document.getElementById('fileStrip').style.display = 'flex';
+  hideResults();
+  const r = new FileReader();
+  r.onload = e => {
+    try { parsed = parseSQL(e.target.result); showPreview(parsed); }
+    catch(ex) { showErr('خطأ في القراءة: ' + ex.message); }
+  };
+  r.readAsText(file,'UTF-8');
+}
+
+function parseSQL(sql) {
+  const tables = {};
+  const cRx = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"']?(\w+)[`"']?\s*\(([^;]+?)\)\s*[^;]*;/gis;
+  let m;
+  while((m=cRx.exec(sql))!==null) {
+    tables[m[1]] = { columns: parseCols(m[2]), rows: [] };
+  }
+  const iRx = /INSERT\s+INTO\s+[`"']?(\w+)[`"']?\s*(?:\(([^)]+)\))?\s*VALUES\s*([\s\S]+?)(?=INSERT\s+INTO|CREATE\s+TABLE|$)/gi;
+  while((m=iRx.exec(sql))!==null) {
+    const n=m[1], cd=m[2], vs=m[3];
+    if(!tables[n]) tables[n]={columns:[],rows:[]};
+    if(cd && tables[n].columns.length===0) tables[n].columns=cd.split(',').map(c=>c.trim().replace(/[`"']/g,''));
+    const rRx=/\(([^)]+)\)/g; let rv;
+    while((rv=rRx.exec(vs))!==null) tables[n].rows.push(parseVals(rv[1]));
+  }
+  if(!Object.keys(tables).length) throw new Error('لم يتم العثور على جداول');
+  return tables;
+}
+function parseCols(body) {
+  return body.split('\n').map(l=>l.trim().replace(/,$/,'').trim())
+    .filter(l=>l && !/^(PRIMARY|UNIQUE|INDEX|KEY|CONSTRAINT|CHECK|FOREIGN)/i.test(l))
+    .map(l=>l.split(/\s+/)[0].replace(/[`"']/g,'')).filter(Boolean);
+}
+function parseVals(str) {
+  const vals=[]; let cur='', inStr=false, sc='';
+  for(let i=0;i<str.length;i++){
+    const c=str[i];
+    if(inStr){ if(c===sc&&str[i-1]!=='\\'){ inStr=false; vals.push(cur); cur=''; } else cur+=c; }
+    else if(c==="'"||c==='"'){ inStr=true; sc=c; }
+    else if(c===','){ vals.push(cur.trim()); cur=''; }
+    else cur+=c;
+  }
+  if(cur.trim()) vals.push(cur.trim());
+  return vals.map(v=>{ v=v.trim(); if(v==='NULL'||v==='null') return null; if(!isNaN(v)&&v!=='') return Number(v); return v; });
+}
+
+function showPreview(t) {
+  const names=Object.keys(t);
+  document.getElementById('tagsBox').innerHTML=names.map(n=>`<span class="tag">${n}</span>`).join('');
+  let tr=0,tc=0; names.forEach(n=>{ tr+=t[n].rows.length; tc+=t[n].columns.length; });
+  document.getElementById('sT').textContent=names.length;
+  document.getElementById('sR').textContent=tr.toLocaleString();
+  document.getElementById('sC').textContent=tc;
+  document.getElementById('statsRow').style.display='grid';
+  document.getElementById('tablesCard').style.display='block';
+  document.getElementById('cvtBtn').style.display='flex';
+}
+
+function doConvert() {
+  if(!parsed) return;
+  const btn=document.getElementById('cvtBtn');
+  btn.disabled=true;
+  document.getElementById('progCard').style.display='block';
+  document.getElementById('sheetsCard').style.display='none';
+  document.getElementById('successCard').style.display='none';
+  document.getElementById('errCard').style.display='none';
+  setTimeout(()=>{
+    try {
+      setP(20,'إنشاء ملف Excel...');
+      const wb=XLSX.utils.book_new();
+      const names=Object.keys(parsed);
+      const shItems=[];
+      names.forEach((n,i)=>{
+        setP(20+Math.round(i/names.length*60),`معالجة: ${n}`);
+        const {columns,rows}=parsed[n];
+        let wd=[];
+        if(columns.length>0) wd.push(columns);
+        else if(rows.length>0) wd.push(rows[0].map((_,i)=>`col_${i+1}`));
+        rows.forEach(r=>wd.push(r));
+        const ws=XLSX.utils.aoa_to_sheet(wd);
+        if(wd.length>0){
+          const rng=XLSX.utils.decode_range(ws['!ref']||'A1');
+          for(let c=rng.s.c;c<=rng.e.c;c++){
+            const cell=ws[XLSX.utils.encode_cell({r:0,c})];
+            if(cell) cell.s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'0F6E56'}},alignment:{horizontal:'center'}};
+          }
+          ws['!cols']=wd[0].map((_,ci)=>({wch:Math.max(...wd.map(r=>String(r[ci]??'').length+2),10)}));
+        }
+        XLSX.utils.book_append_sheet(wb,ws,n.substring(0,31));
+        shItems.push({name:n.substring(0,31),rows:rows.length});
+      });
+      setP(90,'حفظ...');
+      const out=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+      xlsxBlob=new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      setP(100,'اكتمل!');
+      const totalR=Object.values(parsed).reduce((s,t)=>s+t.rows.length,0);
+      const entry={ name:currentName+'.xlsx', sheets:names.length, rows:totalR, date:new Date().toLocaleDateString('ar-IQ'), blob:xlsxBlob };
+      history.unshift(entry);
+      const badge=document.getElementById('histBadge');
+      badge.textContent=history.length; badge.style.display='block';
+      setTimeout(()=>{
+        document.getElementById('progCard').style.display='none';
+        showSheets(shItems);
+        document.getElementById('successMsg').textContent=`${names.length} شيت • ${totalR.toLocaleString()} صف`;
+        document.getElementById('successCard').style.display='block';
+        const url=URL.createObjectURL(xlsxBlob);
+        document.getElementById('dlBtn').onclick=()=>{ const a=document.createElement('a'); a.href=url; a.download=currentName+'.xlsx'; a.click(); };
+        btn.disabled=false;
+      },400);
+    } catch(ex){ showErr('خطأ: '+ex.message); btn.disabled=false; document.getElementById('progCard').style.display='none'; }
+  },50);
+}
+
+function showSheets(items){
+  document.getElementById('sheetsList').innerHTML=items.map(s=>`<div class="sheet-row"><div class="sdot"></div><div class="sname">${s.name}</div><div class="srows">${s.rows.toLocaleString()} صف</div></div>`).join('');
+  document.getElementById('sheetsCard').style.display='block';
+}
+function setP(v,l){ document.getElementById('progFill').style.width=v+'%'; document.getElementById('progLbl').textContent=l; document.getElementById('progPct').textContent=v+'%'; }
+function showErr(m){ const b=document.getElementById('errCard'); b.textContent='⚠ '+m; b.style.display='block'; }
+function hideResults(){ ['statsRow','tablesCard','progCard','sheetsCard','successCard','errCard'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; }); document.getElementById('cvtBtn').style.display='none'; parsed=null; xlsxBlob=null; }
+function resetAll(){ document.getElementById('fileStrip').style.display='none'; document.getElementById('sqlFile').value=''; hideResults(); }
+function fmtSize(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+
+function renderHistory(){
+  const list=document.getElementById('histList');
+  const empty=document.getElementById('histEmpty');
+  const hdr=document.getElementById('histHeader');
+  if(!history.length){ empty.style.display='flex'; hdr.style.display='none'; list.innerHTML=''; return; }
+  empty.style.display='none'; hdr.style.display='flex';
+  document.getElementById('histCount').textContent=history.length+' ملف';
+  list.innerHTML=history.map((h,i)=>`
+    <div class="hist-item">
+      <div class="hist-ficon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0F6E56" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+      <div class="hist-meta">
+        <div class="hist-name">${h.name}</div>
+        <div class="hist-info">${h.sheets} شيت • ${h.rows.toLocaleString()} صف • ${h.date}</div>
+      </div>
+      <div class="hist-dl" onclick="reDownload(${i})"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0F6E56" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+    </div>`).join('');
+}
+function reDownload(i){ const h=history[i]; const url=URL.createObjectURL(h.blob); const a=document.createElement('a'); a.href=url; a.download=h.name; a.click(); }
+function clearHistory(){ history.length=0; document.getElementById('histBadge').style.display='none'; renderHistory(); }
+</script>
