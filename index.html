@@ -1,1176 +1,507 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary: #1A3C5E;
-    --primary-light: #2563A8;
-    --primary-pale: #EBF3FF;
-    --accent: #0EA47A;
-    --accent-light: #D1F5EB;
-    --accent-pale: #F0FBF7;
-    --danger: #DC3545;
-    --danger-light: #FDECEA;
-    --surface: #FFFFFF;
-    --surface-2: #F7F9FC;
-    --surface-3: #EEF2F7;
-    --border: #DDE4EE;
-    --border-strong: #C4CFDF;
-    --text-1: #0F1C2E;
-    --text-2: #4A5D72;
-    --text-3: #8496AB;
-    --shadow-sm: 0 1px 3px rgba(15,28,46,.06), 0 1px 2px rgba(15,28,46,.04);
-    --shadow-md: 0 4px 12px rgba(15,28,46,.08), 0 2px 4px rgba(15,28,46,.05);
-    --shadow-lg: 0 12px 32px rgba(15,28,46,.12), 0 4px 8px rgba(15,28,46,.06);
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B2A;--navy2:#1B2E42;--navy3:#243D56;
+  --teal:#0EA5A0;--teal2:#0CC8C2;--teal-pale:#E6F8F7;
+  --gold:#C9973A;--gold-pale:#FDF4E7;
+  --slate:#4A6580;--slate2:#6B88A2;--slate3:#A8BFD0;
+  --bg:#F4F7FA;--bg2:#FFFFFF;--bg3:#EBF0F5;
+  --border:#D4DDE6;--border2:#C0CDD8;
+  --text1:#0D1B2A;--text2:#3A5068;--text3:#6B88A2;
+  --success:#0B8C6B;--success-bg:#E6F5F1;--success-bdr:#A8DECE;
+  --danger:#C0392B;--danger-bg:#FDECEA;--danger-bdr:#F5BEBE;
+  --radius:10px;--radius-lg:14px;--radius-xl:18px;
+  --shadow:0 1px 3px rgba(13,27,42,.07),0 2px 8px rgba(13,27,42,.05);
+  --shadow-md:0 4px 16px rgba(13,27,42,.10),0 1px 4px rgba(13,27,42,.06);
+}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text1);direction:rtl;min-height:100vh}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── NAV ── */
+.nav{background:var(--navy);padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:34px;height:34px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2}
+.nav-name{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.nav-name span{color:var(--teal2)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-lnk{font-size:13px;color:rgba(255,255,255,.55);padding:6px 14px;border-radius:7px;cursor:pointer;border:none;background:transparent;font-family:'Cairo',sans-serif;transition:all .15s;border:none}
+.nav-lnk:hover{color:#fff;background:rgba(255,255,255,.07)}
+.nav-lnk.active{color:#fff;background:rgba(255,255,255,.1)}
+.nav-badge{font-size:10px;font-weight:700;background:var(--gold);color:#fff;padding:2px 8px;border-radius:20px;margin-right:8px;letter-spacing:.3px}
 
-  body {
-    font-family: 'Cairo', sans-serif;
-    background: linear-gradient(145deg, #EBF3FF 0%, #F0FBF7 50%, #F7F9FC 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0;
-  }
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 55%,var(--navy3) 100%);padding:clamp(40px,7vw,72px) clamp(16px,5vw,64px) clamp(36px,6vw,60px);text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(14,165,160,.12) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-40px;left:10%;width:200px;height:200px;background:radial-gradient(circle,rgba(201,151,58,.08) 0%,transparent 70%);pointer-events:none}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(14,165,160,.15);border:1px solid rgba(14,165,160,.3);color:var(--teal2);font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:.4px}
+.hero-chip-dot{width:6px;height:6px;border-radius:50%;background:var(--teal2)}
+.hero h1{font-size:clamp(22px,5vw,38px);font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:-.5px;line-height:1.2}
+.hero h1 span{color:var(--teal2)}
+.hero p{font-size:clamp(13px,2.5vw,15px);color:rgba(255,255,255,.55);max-width:500px;margin:0 auto;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:clamp(20px,5vw,48px);margin-top:clamp(24px,5vw,36px);flex-wrap:wrap}
+.hero-stat .n{font-size:clamp(20px,4vw,28px);font-weight:800;color:#fff;font-family:'IBM Plex Mono',monospace;letter-spacing:-1px}
+.hero-stat .n span{color:var(--teal2)}
+.hero-stat .l{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;letter-spacing:.3px}
 
-  .app-wrap {
-    width: 100%;
-    max-width: 600px;
-    min-height: 100vh;
-    background: var(--surface);
-    display: flex;
-    flex-direction: column;
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    overflow: hidden;
-  }
+/* ── MAIN ── */
+.main{max-width:900px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(12px,3vw,24px);display:flex;flex-direction:column;gap:clamp(12px,2.5vw,18px)}
 
-  /* ── Header ── */
-  .app-header {
-    background: linear-gradient(135deg, var(--primary) 0%, #1E4D7B 60%, var(--primary-light) 100%);
-    padding: clamp(16px, 4vw, 24px) clamp(16px, 5vw, 28px) clamp(12px, 3vw, 18px);
-    position: relative;
-    overflow: hidden;
-  }
-  .app-header::before {
-    content: '';
-    position: absolute;
-    top: -30px; left: -30px;
-    width: 160px; height: 160px;
-    background: rgba(255,255,255,.05);
-    border-radius: 50%;
-  }
-  .app-header::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; right: 10%;
-    width: 120px; height: 120px;
-    background: rgba(14,164,122,.12);
-    border-radius: 50%;
-  }
-  .header-inner { display: flex; align-items: center; gap: 14px; position: relative; z-index: 1; }
-  .logo-box {
-    width: clamp(40px,8vw,48px); height: clamp(40px,8vw,48px);
-    background: rgba(255,255,255,.15);
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: var(--radius-md);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    backdrop-filter: blur(8px);
-  }
-  .logo-box svg { width: 22px; height: 22px; }
-  .header-text h1 { font-size: clamp(15px,3.5vw,18px); font-weight: 700; color: #fff; letter-spacing: -.3px; }
-  .header-text p { font-size: clamp(10px,2.5vw,12px); color: rgba(255,255,255,.65); margin-top: 1px; }
-  .header-badge {
-    margin-right: auto;
-    background: rgba(14,164,122,.25);
-    border: 1px solid rgba(14,164,122,.4);
-    color: #5DE0B8;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    letter-spacing: .5px;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow)}
+.card-head{padding:clamp(14px,3vw,18px) clamp(16px,3.5vw,24px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-head-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-head-icon.teal{background:var(--teal-pale)}
+.card-head-icon.teal svg{stroke:var(--teal)}
+.card-head-icon.navy{background:var(--bg3)}
+.card-head-icon.navy svg{stroke:var(--navy2)}
+.card-head-icon svg{width:16px;height:16px;fill:none;stroke-width:2}
+.card-head-title{font-size:clamp(13px,2.5vw,14px);font-weight:700;color:var(--text1)}
+.card-head-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.card-head-extra{margin-right:auto}
 
-  /* ── Tabs ── */
-  .tabs {
-    display: flex;
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--border);
-    padding: 0 clamp(12px,4vw,20px);
-    gap: 0;
-  }
-  .tab {
-    flex: 1;
-    padding: 12px 8px 11px;
-    font-size: clamp(12px,2.8vw,13px);
-    font-weight: 600;
-    color: var(--text-3);
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    border-bottom: 2.5px solid transparent;
-    transition: all .2s;
-    font-family: 'Cairo', sans-serif;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .tab svg { width: 15px; height: 15px; }
-  .tab.active { color: var(--primary-light); border-bottom-color: var(--primary-light); }
-  .tab:hover:not(.active) { color: var(--text-2); }
-  .tab-badge {
-    background: var(--danger);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 10px;
-    min-width: 16px;
-    text-align: center;
-    display: none;
-    line-height: 1.4;
-  }
+/* ── UPLOAD ── */
+.drop-zone{padding:clamp(28px,6vw,48px) 24px;text-align:center;cursor:pointer;transition:background .18s;position:relative}
+.drop-zone:hover{background:var(--bg3)}
+.upload-card.has-file .drop-zone{display:none}
+.upload-card.dragover{border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,165,160,.15)}
+.u-icon-wrap{width:clamp(52px,9vw,64px);height:clamp(52px,9vw,64px);background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;transition:transform .2s,background .2s}
+.drop-zone:hover .u-icon-wrap{transform:translateY(-3px);background:var(--teal-pale);border-color:rgba(14,165,160,.3)}
+.u-icon-wrap svg{width:26px;height:26px;stroke:var(--slate);fill:none;stroke-width:1.8;transition:stroke .2s}
+.drop-zone:hover .u-icon-wrap svg{stroke:var(--teal)}
+.drop-zone h3{font-size:clamp(14px,2.8vw,16px);font-weight:700;color:var(--text1);margin-bottom:5px}
+.drop-zone p{font-size:clamp(12px,2.3vw,13px);color:var(--text3);line-height:1.6}
+.drop-lnk{color:var(--teal);font-weight:600;cursor:pointer}
+.ext-tags{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.ext-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);border:1px solid var(--border2);padding:3px 10px;border-radius:5px;letter-spacing:.5px;background:var(--bg3)}
+.file-row{display:none;align-items:center;gap:12px;padding:clamp(12px,2.5vw,16px) clamp(16px,3.5vw,24px);background:var(--success-bg);border-top:1px solid var(--success-bdr)}
+.upload-card.has-file .file-row{display:flex}
+.f-type-badge{flex-shrink:0;width:38px;height:38px;background:#fff;border:1px solid var(--success-bdr);border-radius:var(--radius);display:flex;align-items:center;justify-content:center}
+.f-type-badge svg{width:17px;height:17px;stroke:var(--success);fill:none;stroke-width:2}
+.f-meta{flex:1;min-width:0}
+.f-name{font-size:clamp(12px,2.5vw,13px);font-weight:600;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.f-size{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.rm-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text3);transition:all .15s;flex-shrink:0}
+.rm-btn:hover{background:var(--danger-bg);border-color:var(--danger-bdr);color:var(--danger)}
+input[type=file]{display:none}
 
-  /* ── Panels ── */
-  .panel { display: none; flex-direction: column; gap: clamp(10px,2.5vw,14px); padding: clamp(14px,4vw,20px); flex: 1; overflow-y: auto; }
-  .panel.active { display: flex; }
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,2vw,12px)}
+.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:clamp(14px,3vw,18px) 12px;text-align:center;box-shadow:var(--shadow)}
+.stat-box-icon{font-size:18px;margin-bottom:6px}
+.stat-n{font-size:clamp(20px,4.5vw,28px);font-weight:800;color:var(--navy);font-family:'IBM Plex Mono',monospace;letter-spacing:-1px}
+.stat-l{font-size:11px;color:var(--text3);margin-top:3px;font-weight:500}
+.stat-box.accent .stat-n{color:var(--teal)}
+.stat-box.accent2 .stat-n{color:var(--gold)}
 
-  /* ── Upload Zone ── */
-  .upload-card {
-    border: 1.5px dashed var(--border-strong);
-    border-radius: var(--radius-lg);
-    background: var(--surface-2);
-    transition: all .25s;
-    overflow: hidden;
-  }
-  .upload-card.has-file { border-style: solid; border-color: var(--accent); background: var(--accent-pale); }
-  .upload-card.over { border-color: var(--primary-light); background: var(--primary-pale); }
+/* ── SECTION LABEL ── */
+.sec-lbl{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;padding:clamp(12px,2.5vw,16px) clamp(16px,3.5vw,24px) 0;display:flex;align-items:center;gap:8px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  .drop-zone {
-    padding: clamp(20px,5vw,32px) 20px;
-    text-align: center;
-    cursor: pointer;
-  }
-  .drop-icon {
-    width: clamp(48px,10vw,60px); height: clamp(48px,10vw,60px);
-    background: linear-gradient(135deg, var(--primary-pale), #ddeeff);
-    border-radius: var(--radius-lg);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 14px;
-    transition: transform .2s;
-  }
-  .upload-card:hover .drop-icon { transform: scale(1.06); }
-  .drop-icon svg { width: 26px; height: 26px; stroke: var(--primary-light); fill: none; stroke-width: 2; }
-  .drop-zone h3 { font-size: clamp(13px,3vw,15px); font-weight: 700; color: var(--text-1); margin-bottom: 5px; }
-  .drop-zone p { font-size: clamp(11px,2.5vw,12px); color: var(--text-3); line-height: 1.5; }
-  .browse-link { color: var(--primary-light); font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
-  .file-ext-tag {
-    display: inline-block;
-    background: var(--surface-3);
-    border: 1px solid var(--border);
-    color: var(--text-3);
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 5px;
-    font-family: 'IBM Plex Mono', monospace;
-    margin-top: 8px;
-    letter-spacing: .5px;
-  }
+/* ── TAGS ── */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:7px;padding:10px clamp(16px,3.5vw,24px) clamp(12px,2.5vw,16px)}
+.tbl-tag{background:var(--teal-pale);color:var(--teal);border:1px solid rgba(14,165,160,.25);font-size:clamp(10px,2.2vw,12px);padding:4px 13px;border-radius:20px;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:-.2px}
 
-  .file-info-strip {
-    display: none;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: var(--accent-pale);
-    border-top: 1px solid var(--accent-light);
-  }
-  .file-icon {
-    width: 38px; height: 38px;
-    background: #fff;
-    border: 1px solid var(--accent-light);
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .file-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 2; }
-  .file-meta { flex: 1; min-width: 0; }
-  .file-name { font-size: clamp(11px,2.8vw,13px); font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .file-size { font-size: 11px; color: var(--text-3); font-family: 'IBM Plex Mono', monospace; }
-  .remove-btn {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: #fff;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-3);
-    font-size: 16px;
-    transition: all .15s;
-    flex-shrink: 0;
-  }
-  .remove-btn:hover { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+/* ── OPTIONS ── */
+.opt-row{display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,2.5vw,14px) clamp(16px,3.5vw,24px);border-bottom:1px solid var(--border);gap:16px}
+.opt-row:last-child{border-bottom:none}
+.opt-info .opt-main{font-size:clamp(12px,2.5vw,13px);color:var(--text1);font-weight:600}
+.opt-info .opt-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.tgl{width:40px;height:22px;background:var(--border2);border-radius:11px;cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0}
+.tgl.on{background:var(--teal)}
+.tgl-k{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:3px;right:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.tgl.on .tgl-k{transform:translateX(-18px)}
 
-  input[type=file] { display: none; }
+/* ── CONVERT BTN ── */
+.cvt-btn{width:100%;padding:clamp(13px,3vw,16px);background:linear-gradient(135deg,var(--teal) 0%,#0B8C88 100%);color:#fff;border:none;border-radius:var(--radius-lg);font-size:clamp(13px,3vw,15px);font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;gap:9px;font-family:'Cairo',sans-serif;transition:all .18s;box-shadow:0 4px 14px rgba(14,165,160,.3),0 1px 3px rgba(14,165,160,.2);letter-spacing:-.2px}
+.cvt-btn:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 6px 20px rgba(14,165,160,.35)}
+.cvt-btn:active{transform:translateY(0)}
+.cvt-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.cvt-btn svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2.5;flex-shrink:0}
 
-  /* ── Stats Row ── */
-  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(6px,2vw,10px); }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: clamp(10px,3vw,14px) 8px;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-    transition: transform .2s;
-  }
-  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-  .stat-num { font-size: clamp(18px,5vw,24px); font-weight: 800; color: var(--primary); font-family: 'IBM Plex Mono', monospace; letter-spacing: -1px; }
-  .stat-label { font-size: clamp(10px,2.5vw,11px); color: var(--text-3); margin-top: 2px; font-weight: 500; }
-  .stat-icon { font-size: 16px; margin-bottom: 4px; }
+/* ── PROGRESS ── */
+.prog-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);padding:clamp(16px,3.5vw,22px);display:none;box-shadow:var(--shadow)}
+.prog-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+.prog-lbl{font-size:clamp(12px,2.5vw,13px);color:var(--text2);font-weight:500}
+.prog-pct{font-size:clamp(18px,4vw,24px);font-weight:800;color:var(--navy);font-family:'IBM Plex Mono',monospace;line-height:1}
+.prog-track{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;border:1px solid var(--border)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal2));border-radius:4px;transition:width .35s ease;width:0}
+.prog-step{font-size:11px;color:var(--text3);margin-top:8px;font-family:'IBM Plex Mono',monospace}
 
-  /* ── Tables Card ── */
-  .info-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: clamp(12px,3.5vw,16px);
-    box-shadow: var(--shadow-sm);
-  }
-  .card-label {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--text-3);
-    text-transform: uppercase;
-    letter-spacing: .8px;
-    margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .card-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
-  .table-tag {
-    background: var(--primary-pale);
-    color: var(--primary-light);
-    border: 1px solid #C5D8F5;
-    font-size: clamp(10px,2.5vw,12px);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-family: 'IBM Plex Mono', monospace;
-    letter-spacing: -.2px;
-  }
+/* ── SHEETS ── */
+.sheets-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;display:none;box-shadow:var(--shadow)}
+.sh-row{display:flex;align-items:center;gap:10px;padding:10px clamp(16px,3.5vw,24px);border-bottom:1px solid var(--border)}
+.sh-row:last-child{border-bottom:none}
+.sh-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;border:2px solid rgba(0,0,0,.1)}
+.sh-name{flex:1;font-size:clamp(11px,2.4vw,13px);font-weight:600;color:var(--text1);font-family:'IBM Plex Mono',monospace}
+.sh-meta{font-size:11px;color:var(--text3)}
 
-  /* ── Options Card ── */
-  .options-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: clamp(12px,3.5vw,16px);
-    box-shadow: var(--shadow-sm);
-    display: none;
-  }
-  .option-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-  }
-  .option-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .option-label { font-size: clamp(11px,2.8vw,13px); color: var(--text-1); font-weight: 500; flex: 1; }
-  .option-sub { font-size: 10px; color: var(--text-3); margin-top: 1px; }
-  .toggle {
-    width: 40px; height: 22px;
-    background: var(--surface-3);
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    cursor: pointer;
-    position: relative;
-    transition: background .2s;
-    flex-shrink: 0;
-  }
-  .toggle.on { background: var(--accent); border-color: var(--accent); }
-  .toggle-knob {
-    width: 16px; height: 16px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 2px; right: 2px;
-    transition: transform .2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,.15);
-  }
-  .toggle.on .toggle-knob { transform: translateX(-18px); }
+/* ── SUCCESS ── */
+.success-card{background:linear-gradient(135deg,#E8F8F5 0%,#F0FBF9 100%);border:1px solid var(--success-bdr);border-radius:var(--radius-xl);padding:clamp(20px,5vw,32px);display:none;text-align:center;box-shadow:var(--shadow)}
+.sc-icon{width:54px;height:54px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 4px 14px rgba(11,140,107,.25)}
+.sc-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5}
+.success-card h3{font-size:clamp(15px,3.5vw,18px);font-weight:800;color:#064E38;margin-bottom:5px}
+.success-card p{font-size:clamp(12px,2.5vw,13px);color:var(--success);margin-bottom:18px;opacity:.85}
+.dl-btn{background:var(--navy);color:#fff;border:none;padding:clamp(11px,2.5vw,13px) clamp(22px,5vw,32px);border-radius:var(--radius-lg);font-size:clamp(12px,2.8vw,14px);font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:8px;transition:all .18s;box-shadow:0 4px 12px rgba(13,27,42,.2)}
+.dl-btn:hover{opacity:.85;transform:translateY(-1px)}
+.dl-btn svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;flex-shrink:0}
 
-  /* ── Convert Button ── */
-  .convert-btn {
-    width: 100%;
-    padding: clamp(13px,3.5vw,16px);
-    background: linear-gradient(135deg, var(--accent) 0%, #0B8F6A 100%);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: clamp(13px,3.2vw,15px);
-    font-weight: 700;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-family: 'Cairo', sans-serif;
-    transition: all .2s;
-    box-shadow: 0 4px 14px rgba(14,164,122,.3);
-    letter-spacing: -.2px;
-  }
-  .convert-btn:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(14,164,122,.35); }
-  .convert-btn:active { transform: translateY(0); }
-  .convert-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
-  .convert-btn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2.5; }
+/* ── ERROR ── */
+.err-card{background:var(--danger-bg);border:1px solid var(--danger-bdr);border-radius:var(--radius-lg);padding:clamp(12px,2.5vw,15px) clamp(14px,3vw,20px);display:none;font-size:clamp(12px,2.5vw,13px);color:var(--danger);line-height:1.6}
 
-  /* ── Progress ── */
-  .prog-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: clamp(14px,4vw,18px);
-    display: none;
-    box-shadow: var(--shadow-sm);
-  }
-  .prog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
-  .prog-label { font-size: clamp(12px,2.8vw,13px); color: var(--text-2); font-weight: 500; }
-  .prog-pct { font-size: clamp(15px,3.5vw,17px); font-weight: 800; color: var(--primary); font-family: 'IBM Plex Mono', monospace; }
-  .prog-track { height: 8px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
-  .prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #2CE8AD); border-radius: 4px; transition: width .35s ease; width: 0; }
-  .prog-step { font-size: 11px; color: var(--text-3); margin-top: 7px; font-family: 'IBM Plex Mono', monospace; }
+/* ── HISTORY ── */
+.hist-toolbar{display:none;justify-content:space-between;align-items:center;padding:4px 0}
+.hist-cnt{font-size:12px;color:var(--text3);font-weight:500}
+.clr-btn{font-size:12px;color:var(--danger);background:none;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:600;padding:5px 10px;border-radius:7px;transition:background .15s}
+.clr-btn:hover{background:var(--danger-bg)}
+.empty-st{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:56px 20px;text-align:center}
+.e-icon{width:60px;height:60px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center}
+.e-icon svg{width:26px;height:26px;stroke:var(--slate3);fill:none;stroke-width:1.5}
+.empty-st h4{font-size:clamp(13px,2.8vw,15px);font-weight:700;color:var(--text2)}
+.empty-st p{font-size:clamp(11px,2.3vw,12px);color:var(--text3);max-width:220px;line-height:1.7}
+.hi-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);padding:clamp(12px,2.8vw,16px) clamp(14px,3vw,20px);display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);transition:box-shadow .18s,transform .18s}
+.hi-item:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.hi-icon-box{width:clamp(38px,7vw,44px);height:clamp(38px,7vw,44px);background:var(--teal-pale);border:1px solid rgba(14,165,160,.2);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hi-icon-box svg{width:18px;height:18px;stroke:var(--teal);fill:none;stroke-width:2}
+.hi-meta{flex:1;min-width:0}
+.hi-name{font-size:clamp(11px,2.5vw,13px);font-weight:600;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'IBM Plex Mono',monospace}
+.hi-info{font-size:11px;color:var(--text3);margin-top:3px}
+.hi-dl-btn{width:34px;height:34px;border-radius:var(--radius);background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
+.hi-dl-btn:hover{background:var(--teal-pale);border-color:rgba(14,165,160,.3)}
+.hi-dl-btn svg{width:15px;height:15px;stroke:var(--slate);fill:none;stroke-width:2;transition:stroke .15s}
+.hi-dl-btn:hover svg{stroke:var(--teal)}
 
-  /* ── Sheets Card ── */
-  .sheets-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    display: none;
-  }
-  .sheet-header { padding: 12px 16px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
-  .sheet-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    transition: background .15s;
-  }
-  .sheet-item:last-child { border-bottom: none; }
-  .sheet-item:hover { background: var(--surface-2); }
-  .sheet-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .sheet-name { flex: 1; font-size: clamp(11px,2.8vw,13px); font-weight: 600; color: var(--text-1); font-family: 'IBM Plex Mono', monospace; }
-  .sheet-cols { font-size: 11px; color: var(--text-3); margin-left: 8px; }
-  .sheet-rows { font-size: 11px; color: var(--text-3); }
+/* ── FOOTER ── */
+.footer{text-align:center;padding:clamp(20px,4vw,32px) 16px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:8px;background:var(--bg2)}
+.footer strong{color:var(--text2)}
 
-  /* ── Success Card ── */
-  .success-card {
-    background: linear-gradient(135deg, #F0FBF7, #E6F7F2);
-    border: 1px solid #A8E8D4;
-    border-radius: var(--radius-lg);
-    padding: clamp(18px,5vw,24px);
-    display: none;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-  }
-  .success-icon {
-    width: 52px; height: 52px;
-    background: linear-gradient(135deg, var(--accent), #0B8F6A);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 12px;
-    box-shadow: 0 4px 14px rgba(14,164,122,.3);
-  }
-  .success-icon svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2.5; }
-  .success-card h3 { font-size: clamp(15px,3.5vw,17px); font-weight: 800; color: #074D36; margin-bottom: 5px; }
-  .success-card p { font-size: clamp(11px,2.8vw,13px); color: #0F6E56; margin-bottom: 16px; }
-  .dl-btn {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: #fff;
-    border: none;
-    padding: clamp(10px,3vw,12px) clamp(20px,5vw,28px);
-    border-radius: var(--radius-sm);
-    font-size: clamp(12px,3vw,13px);
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'Cairo', sans-serif;
-    display: inline-flex; align-items: center; gap: 7px;
-    transition: all .2s;
-    box-shadow: 0 4px 12px rgba(26,60,94,.25);
-    letter-spacing: -.2px;
-  }
-  .dl-btn:hover { opacity: .9; transform: translateY(-1px); }
-  .dl-btn svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2; }
-
-  /* ── Error Card ── */
-  .err-card {
-    background: var(--danger-light);
-    border: 1px solid #F5BEBE;
-    border-radius: var(--radius-md);
-    padding: 14px 16px;
-    display: none;
-    font-size: clamp(12px,2.8vw,13px);
-    color: #7A1F1F;
-    line-height: 1.5;
-  }
-  .err-icon { display: inline-block; margin-left: 6px; }
-
-  /* ── History Panel ── */
-  .hist-panel { display: none; flex-direction: column; gap: 10px; padding: clamp(14px,4vw,20px); flex: 1; overflow-y: auto; }
-  .hist-panel.active { display: flex; }
-  .empty-state {
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 12px;
-    padding: 40px 20px;
-    text-align: center;
-  }
-  .empty-icon {
-    width: 64px; height: 64px;
-    background: var(--surface-3);
-    border-radius: var(--radius-lg);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .empty-icon svg { width: 28px; height: 28px; stroke: var(--text-3); fill: none; stroke-width: 1.5; }
-  .empty-state h4 { font-size: clamp(13px,3vw,15px); font-weight: 700; color: var(--text-2); }
-  .empty-state p { font-size: clamp(11px,2.5vw,12px); color: var(--text-3); max-width: 200px; line-height: 1.6; }
-
-  .hist-toolbar { display: none; justify-content: space-between; align-items: center; }
-  .hist-count { font-size: clamp(11px,2.5vw,12px); color: var(--text-3); font-weight: 600; }
-  .clear-all-btn { font-size: clamp(11px,2.5vw,12px); color: var(--danger); background: none; border: none; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: 600; padding: 4px 8px; border-radius: 6px; transition: background .15s; }
-  .clear-all-btn:hover { background: var(--danger-light); }
-
-  .hist-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: clamp(12px,3.5vw,14px);
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: var(--shadow-sm);
-    transition: all .2s;
-  }
-  .hist-item:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-  .hist-file-icon {
-    width: clamp(36px,8vw,42px); height: clamp(36px,8vw,42px);
-    background: var(--accent-pale);
-    border: 1px solid var(--accent-light);
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .hist-file-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 2; }
-  .hist-meta { flex: 1; min-width: 0; }
-  .hist-name { font-size: clamp(11px,2.8vw,13px); font-weight: 700; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'IBM Plex Mono', monospace; }
-  .hist-info { font-size: clamp(10px,2.3vw,11px); color: var(--text-3); margin-top: 3px; }
-  .hist-dl-btn {
-    width: 34px; height: 34px;
-    border-radius: var(--radius-sm);
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all .15s;
-    flex-shrink: 0;
-  }
-  .hist-dl-btn:hover { background: var(--accent-pale); border-color: var(--accent-light); }
-  .hist-dl-btn svg { width: 15px; height: 15px; stroke: var(--accent); fill: none; stroke-width: 2; }
-
-  /* ── Bottom Nav ── */
-  .bottom-nav {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding: 6px 0 max(10px, env(safe-area-inset-bottom));
-    box-shadow: 0 -4px 16px rgba(15,28,46,.05);
-  }
-  .nav-btn {
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    padding: 6px 8px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    transition: all .15s;
-    font-family: 'Cairo', sans-serif;
-    position: relative;
-  }
-  .nav-btn svg { width: 20px; height: 20px; stroke: var(--text-3); fill: none; stroke-width: 1.8; transition: stroke .15s; }
-  .nav-btn span { font-size: clamp(10px,2.3vw,11px); color: var(--text-3); font-weight: 600; transition: color .15s; }
-  .nav-btn.active svg { stroke: var(--primary-light); }
-  .nav-btn.active span { color: var(--primary-light); }
-  .nav-btn.active::after { content: ''; position: absolute; bottom: 0; left: 25%; right: 25%; height: 2.5px; background: var(--primary-light); border-radius: 2px; }
-
-  /* ── Responsive ── */
-  @media (min-width: 600px) {
-    body { padding: 20px; align-items: flex-start; }
-    .app-wrap { min-height: auto; border-radius: 20px; overflow: hidden; max-height: 90vh; }
-    .panel, .hist-panel { max-height: calc(90vh - 200px); }
-  }
-  @media (min-width: 900px) {
-    .app-wrap { max-width: 560px; }
-  }
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .hero-stats{gap:24px}
+  .hero p{display:none}
+}
 </style>
-</head>
-<body>
-<div class="app-wrap">
 
-  <!-- Header -->
-  <div class="app-header">
-    <div class="header-inner">
-      <div class="logo-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="8" y1="13" x2="16" y2="13"/>
-          <line x1="8" y1="17" x2="16" y2="17"/>
-        </svg>
-      </div>
-      <div class="header-text">
-        <h1>SQL → Excel</h1>
-        <p>محوّل الملفات الذكي</p>
-      </div>
-      <div class="header-badge">Pro</div>
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
     </div>
+    <span class="nav-name">Data<span>Convert</span></span>
   </div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" id="tabConvert" onclick="switchTab('convert')">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      تحويل
-    </button>
-    <button class="tab" id="tabHistory" onclick="switchTab('history')">
-      <svg viewBox="0 0 24 24"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4.08"/><polyline points="3 3 3 9 9 9"/></svg>
-      السجل
-      <span class="tab-badge" id="histBadge"></span>
-    </button>
+  <div class="nav-links">
+    <button class="nav-lnk active" onclick="switchTab('c')">تحويل</button>
+    <button class="nav-lnk" onclick="switchTab('h')">السجل</button>
+    <span class="nav-badge">Pro</span>
   </div>
+</nav>
 
-  <!-- Convert Panel -->
-  <div class="panel active" id="panelConvert">
+<div class="hero">
+  <div class="hero-chip"><div class="hero-chip-dot"></div>محوّل ملفات احترافي</div>
+  <h1>حوّل ملفات <span>SQL</span> إلى Excel<br>بضغطة واحدة</h1>
+  <p>أداة ذكية تحلل بنية قاعدة البيانات وتُنشئ ملف Excel منظم مع ألوان وتنسيق تلقائي</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="n">∞<span> جدول</span></div><div class="l">يدعم ملفات متعددة الجداول</div></div>
+    <div class="hero-stat"><div class="n">100<span>%</span></div><div class="l">تحليل تلقائي للبنية</div></div>
+    <div class="hero-stat"><div class="n">xlsx<span> فوري</span></div><div class="l">تنسيق كامل بدون كود</div></div>
+  </div>
+</div>
 
-    <!-- Upload -->
-    <div class="upload-card" id="uploadCard">
+<div id="mainWrap">
+<div class="main">
+
+  <div id="panelC" style="display:flex;flex-direction:column;gap:clamp(12px,2.5vw,18px)">
+
+    <div class="card upload-card" id="uploadCard">
+      <div class="card-head">
+        <div class="card-head-icon teal"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <div><div class="card-head-title">رفع الملف</div><div class="card-head-sub">اسحب أو اختر ملف SQL من جهازك</div></div>
+      </div>
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('sqlFile').click()">
-        <div class="drop-icon">
+        <div class="u-icon-wrap">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
-        <h3>اسحب ملف SQL هنا</h3>
-        <p>أو <span class="browse-link" onclick="e=>e.stopPropagation()">تصفح من جهازك</span></p>
-        <span class="file-ext-tag">.SQL .TXT</span>
+        <h3>اسحب الملف هنا</h3>
+        <p>أو <span class="drop-lnk">تصفح من جهازك</span></p>
+        <div class="ext-tags"><span class="ext-tag">.SQL</span><span class="ext-tag">.TXT</span></div>
       </div>
-      <div class="file-info-strip" id="fileStrip">
-        <div class="file-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        </div>
-        <div class="file-meta">
-          <div class="file-name" id="fName"></div>
-          <div class="file-size" id="fSize"></div>
-        </div>
-        <button class="remove-btn" onclick="resetAll()" title="إزالة الملف">×</button>
+      <div class="file-row" id="fileRow">
+        <div class="f-type-badge"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="f-meta"><div class="f-name" id="fName"></div><div class="f-size" id="fSize"></div></div>
+        <button class="rm-btn" onclick="resetAll()">×</button>
       </div>
     </div>
     <input type="file" id="sqlFile" accept=".sql,.txt">
 
-    <!-- Stats -->
-    <div class="stats-row" id="statsRow" style="display:none">
-      <div class="stat-card">
-        <div class="stat-icon">🗃️</div>
-        <div class="stat-num" id="sT">0</div>
-        <div class="stat-label">جدول</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">📋</div>
-        <div class="stat-num" id="sR">0</div>
-        <div class="stat-label">صف</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">📊</div>
-        <div class="stat-num" id="sC">0</div>
-        <div class="stat-label">عمود</div>
-      </div>
+    <div class="stats-grid" id="statsRow" style="display:none">
+      <div class="stat-box accent"><div class="stat-box-icon">🗃️</div><div class="stat-n" id="sT">0</div><div class="stat-l">جدول مكتشف</div></div>
+      <div class="stat-box"><div class="stat-box-icon">📋</div><div class="stat-n" id="sR">0</div><div class="stat-l">إجمالي الصفوف</div></div>
+      <div class="stat-box accent2"><div class="stat-box-icon">📊</div><div class="stat-n" id="sC">0</div><div class="stat-l">إجمالي الأعمدة</div></div>
     </div>
 
-    <!-- Tables -->
-    <div class="info-card" id="tablesCard" style="display:none">
-      <div class="card-label">الجداول المكتشفة</div>
+    <div class="card" id="tablesCard" style="display:none">
+      <div class="card-head">
+        <div class="card-head-icon navy"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+        <div><div class="card-head-title">الجداول المكتشفة</div><div class="card-head-sub">سيتم إنشاء شيت لكل جدول</div></div>
+      </div>
       <div class="tags-wrap" id="tagsBox"></div>
     </div>
 
-    <!-- Options -->
-    <div class="options-card" id="optionsCard">
-      <div class="card-label">خيارات التصدير</div>
-      <div class="option-row">
-        <div>
-          <div class="option-label">تجميد صف العناوين</div>
-          <div class="option-sub">يبقى العنوان ظاهراً عند التمرير</div>
-        </div>
-        <div class="toggle on" id="togFreeze" onclick="this.classList.toggle('on')">
-          <div class="toggle-knob"></div>
-        </div>
+    <div class="card" id="optCard" style="display:none">
+      <div class="card-head">
+        <div class="card-head-icon navy"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></div>
+        <div><div class="card-head-title">خيارات التصدير</div><div class="card-head-sub">تخصيص ملف Excel الناتج</div></div>
       </div>
-      <div class="option-row">
-        <div>
-          <div class="option-label">تصفية تلقائية</div>
-          <div class="option-sub">إضافة Auto Filter على الأعمدة</div>
-        </div>
-        <div class="toggle on" id="togFilter" onclick="this.classList.toggle('on')">
-          <div class="toggle-knob"></div>
-        </div>
+      <div class="opt-row">
+        <div class="opt-info"><div class="opt-main">تجميد صف العناوين</div><div class="opt-sub">يبقى العنوان ظاهراً عند التمرير للأسفل</div></div>
+        <button class="tgl on" id="togFreeze" onclick="this.classList.toggle('on')"><div class="tgl-k"></div></button>
       </div>
-      <div class="option-row">
-        <div>
-          <div class="option-label">ألوان عشوائية للعناوين</div>
-          <div class="option-sub">لون باستيل مختلف لكل جدول</div>
-        </div>
-        <div class="toggle on" id="togColors" onclick="this.classList.toggle('on')">
-          <div class="toggle-knob"></div>
-        </div>
+      <div class="opt-row">
+        <div class="opt-info"><div class="opt-main">تصفية تلقائية</div><div class="opt-sub">إضافة Auto Filter على جميع الأعمدة</div></div>
+        <button class="tgl on" id="togFilter" onclick="this.classList.toggle('on')"><div class="tgl-k"></div></button>
       </div>
     </div>
 
-    <!-- Convert Btn -->
-    <button class="convert-btn" id="cvtBtn" onclick="doConvert()">
+    <button class="cvt-btn" id="cvtBtn" onclick="doConvert()">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-      تحويل إلى Excel
+      تحويل إلى Excel الآن
     </button>
 
-    <!-- Progress -->
     <div class="prog-card" id="progCard">
-      <div class="prog-header">
-        <span class="prog-label" id="progLabel">جاري المعالجة...</span>
+      <div class="prog-head">
+        <span class="prog-lbl" id="progLbl">جاري المعالجة...</span>
         <span class="prog-pct" id="progPct">0%</span>
       </div>
       <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
       <div class="prog-step" id="progStep">—</div>
     </div>
 
-    <!-- Sheets Preview -->
     <div class="sheets-card" id="sheetsCard">
-      <div class="sheet-header">
-        <div class="card-label" style="margin-bottom:0">الشيتات في الملف</div>
+      <div class="card-head">
+        <div class="card-head-icon teal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+        <div><div class="card-head-title">الشيتات في الملف</div></div>
       </div>
       <div id="sheetsList"></div>
     </div>
 
-    <!-- Success -->
     <div class="success-card" id="successCard">
-      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="sc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       <h3>تم التحويل بنجاح!</h3>
       <p id="successMsg">الملف جاهز للتحميل</p>
       <button class="dl-btn" id="dlBtn">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        تحميل الملف
+        تحميل ملف Excel
       </button>
     </div>
 
-    <!-- Error -->
     <div class="err-card" id="errCard"></div>
   </div>
 
-  <!-- History Panel -->
-  <div class="hist-panel" id="panelHistory">
-    <div id="histEmpty" class="empty-state">
-      <div class="empty-icon">
-        <svg viewBox="0 0 24 24"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4.08"/><polyline points="3 3 3 9 9 9"/></svg>
-      </div>
-      <h4>لا يوجد ملفات بعد</h4>
-      <p>قم بتحويل ملف SQL لظهوره هنا</p>
-    </div>
+  <div id="panelH" style="display:none;flex-direction:column;gap:clamp(10px,2vw,14px)">
     <div class="hist-toolbar" id="histToolbar">
-      <span class="hist-count" id="histCountTxt"></span>
-      <button class="clear-all-btn" onclick="clearHistory()">مسح الكل</button>
+      <span class="hist-cnt" id="histCnt"></span>
+      <button class="clr-btn" onclick="clearHist()">مسح الكل</button>
     </div>
-    <div id="histList"></div>
+    <div class="empty-st" id="histEmpty">
+      <div class="e-icon"><svg viewBox="0 0 24 24"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4.08"/><polyline points="3 3 3 9 9 9"/></svg></div>
+      <h4>لا توجد ملفات محوّلة</h4>
+      <p>قم بتحويل ملف SQL وسيظهر هنا في السجل</p>
+    </div>
+    <div id="histList" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
 
-  <!-- Bottom Nav -->
-  <div class="bottom-nav">
-    <button class="nav-btn active" id="navConvert" onclick="switchTab('convert')">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <span>تحويل</span>
-    </button>
-    <button class="nav-btn" id="navHistory" onclick="switchTab('history')">
-      <svg viewBox="0 0 24 24"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4.08"/><polyline points="3 3 3 9 9 9"/></svg>
-      <span>السجل</span>
-    </button>
-  </div>
+</div>
 </div>
 
-<script>
-/* ===================== STATE ===================== */
-let parsed = null, xlsxBlob = null, currentName = '';
-const history = [];
+<div class="footer">
+  <strong>DataConvert Pro</strong> — محوّل SQL إلى Excel احترافي &nbsp;|&nbsp; جميع العمليات تتم محلياً على جهازك
+</div>
 
-/* ── Pastel Colors Pool (hex without #) ── */
-const PASTEL_POOL = [
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+let parsed=null,xlsxBlob=null,curName='';
+const hist=[];
+const PASTEL=[
   ['B8D4F0','1A3C5E'],['B8EAD8','0A4A32'],['F5D5C5','6B2A0E'],
   ['D5C5F0','3A1E6B'],['F0E8B8','5C4A00'],['C5E8F0','0E3D4A'],
   ['F0C5D5','6B0E2A'],['C5F0D5','0E4A2A'],['E8D5F0','4A1E6B'],
-  ['F0D5C5','6B2A0E'],['D5F0E8','0E6B4A'],['F5E5C5','6B4A00'],
+  ['F5E5C5','6B4A00'],['D5F0E8','0E6B4A'],['E8F0C5','3A4A0E']
 ];
 
-function getHeaderStyle(idx) {
-  const [bg, fg] = PASTEL_POOL[idx % PASTEL_POOL.length];
-  return {
-    font: { bold: true, color: { rgb: fg }, sz: 11 },
-    fill: { patternType: 'solid', fgColor: { rgb: bg } },
-    alignment: { horizontal: 'center', vertical: 'center', wrapText: false },
-    border: {
-      bottom: { style: 'medium', color: { rgb: fg } },
-      top: { style: 'thin', color: { rgb: bg } },
-      left: { style: 'thin', color: { rgb: bg } },
-      right: { style: 'thin', color: { rgb: bg } }
-    }
-  };
+function switchTab(t){
+  document.getElementById('panelC').style.display=t==='c'?'flex':'none';
+  document.getElementById('panelH').style.display=t==='h'?'flex':'none';
+  if(t==='h'){document.getElementById('histBadge')&&(document.getElementById('histBadge').style.display='none');renderHist();}
 }
 
-function getDataStyle(rowIdx) {
-  return {
-    fill: { patternType: 'solid', fgColor: { rgb: rowIdx % 2 === 0 ? 'FFFFFF' : 'F7F9FC' } },
-    border: {
-      bottom: { style: 'hair', color: { rgb: 'DDE4EE' } },
-      left: { style: 'hair', color: { rgb: 'DDE4EE' } },
-      right: { style: 'hair', color: { rgb: 'DDE4EE' } }
-    },
-    alignment: { vertical: 'center' }
-  };
-}
+const uc=document.getElementById('uploadCard');
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();uc.classList.add('dragover');});
+dz.addEventListener('dragleave',()=>uc.classList.remove('dragover'));
+dz.addEventListener('drop',e=>{e.preventDefault();uc.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)handleFile(f);});
+document.getElementById('sqlFile').addEventListener('change',e=>{if(e.target.files[0])handleFile(e.target.files[0]);});
 
-/* ===================== TAB SWITCH ===================== */
-function switchTab(t) {
-  document.getElementById('panelConvert').classList.toggle('active', t === 'convert');
-  document.getElementById('panelHistory').classList.toggle('active', t === 'history');
-  document.getElementById('navConvert').classList.toggle('active', t === 'convert');
-  document.getElementById('navHistory').classList.toggle('active', t === 'history');
-  document.getElementById('tabConvert').classList.toggle('active', t === 'convert');
-  document.getElementById('tabHistory').classList.toggle('active', t === 'history');
-  if (t === 'history') { document.getElementById('histBadge').style.display = 'none'; renderHistory(); }
-}
-
-/* ===================== DRAG & DROP ===================== */
-const dz = document.getElementById('dropZone');
-const uc = document.getElementById('uploadCard');
-dz.addEventListener('dragover', e => { e.preventDefault(); uc.classList.add('over'); });
-dz.addEventListener('dragleave', () => uc.classList.remove('over'));
-dz.addEventListener('drop', e => { e.preventDefault(); uc.classList.remove('over'); const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
-document.getElementById('sqlFile').addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
-
-/* ===================== FILE HANDLING ===================== */
-function handleFile(file) {
-  if (!file.name.match(/\.(sql|txt)$/i)) { showErr('الرجاء رفع ملف SQL أو TXT فقط'); return; }
-  if (file.size > 50 * 1024 * 1024) { showErr('حجم الملف كبير جداً (الحد الأقصى 50 ميجابايت)'); return; }
-  currentName = file.name.replace(/\.[^.]+$/, '');
-  document.getElementById('fName').textContent = file.name;
-  document.getElementById('fSize').textContent = fmtSize(file.size);
-  document.getElementById('fileStrip').style.display = 'flex';
+function handleFile(file){
+  if(!file.name.match(/\.(sql|txt)$/i)){showErr('الرجاء رفع ملف .sql أو .txt فقط');return;}
+  if(file.size>50*1024*1024){showErr('حجم الملف يتجاوز الحد الأقصى (50 MB)');return;}
+  curName=file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('fName').textContent=file.name;
+  document.getElementById('fSize').textContent=fmtSz(file.size);
   uc.classList.add('has-file');
-  hideResults();
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      parsed = parseSQL(e.target.result);
-      showPreview(parsed);
-    } catch (ex) {
-      showErr('خطأ في تحليل الملف: ' + ex.message);
-    }
-  };
-  reader.onerror = () => showErr('فشل في قراءة الملف');
-  reader.readAsText(file, 'UTF-8');
+  hideRes();
+  const r=new FileReader();
+  r.onload=e=>{try{parsed=parseSQL(e.target.result);showPreview(parsed);}catch(ex){showErr('خطأ في تحليل الملف: '+ex.message);}};
+  r.onerror=()=>showErr('فشل في قراءة الملف');
+  r.readAsText(file,'UTF-8');
 }
 
-/* ===================== SQL PARSER ===================== */
-function parseSQL(sql) {
-  // Normalize line endings and remove BOM
-  sql = sql.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/^\uFEFF/, '');
-
-  // Remove single-line comments (-- ...)
-  sql = sql.replace(/--[^\n]*/g, '');
-
-  // Remove multi-line comments (/* ... */)
-  sql = sql.replace(/\/\*[\s\S]*?\*\//g, '');
-
-  const tables = {};
-
-  // ── CREATE TABLE ──
-  const createRx = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:`([^`]+)`|"([^"]+)"|'([^']+)'|(\w+))\s*\(([^;]+?)\)\s*[^;]*;/gis;
+function parseSQL(sql){
+  sql=sql.replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/^\uFEFF/,'');
+  sql=sql.replace(/--[^\n]*/g,'');
+  sql=sql.replace(/\/\*[\s\S]*?\*\//g,'');
+  const tables={};
+  const cRx=/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:`([^`]+)`|"([^"]+)"|'([^']+)'|(\w+))\s*\(([^;]+?)\)\s*[^;]*;/gis;
   let m;
-  while ((m = createRx.exec(sql)) !== null) {
-    const tName = (m[1] || m[2] || m[3] || m[4]).trim();
-    tables[tName] = { columns: parseCols(m[5]), rows: [], types: parseColTypes(m[5]) };
+  while((m=cRx.exec(sql))!==null){const n=(m[1]||m[2]||m[3]||m[4]).trim();tables[n]={columns:parseCols(m[5]),rows:[]};}
+  const iRx=/INSERT\s+INTO\s+(?:`([^`]+)`|"([^"]+)"|'([^']+)'|(\w+))\s*(?:\(([^)]+)\))?\s*VALUES\s*([\s\S]+?)(?=;)/gi;
+  while((m=iRx.exec(sql))!==null){
+    const n=(m[1]||m[2]||m[3]||m[4]).trim();const cd=m[5],vb=m[6];
+    if(!tables[n])tables[n]={columns:[],rows:[]};
+    if(cd&&tables[n].columns.length===0)tables[n].columns=cd.split(',').map(c=>c.trim().replace(/[`"']/g,''));
+    tables[n].rows.push(...parseValBlock(vb));
   }
-
-  // ── INSERT INTO (multi-row and single-row) ──
-  // Match both: INSERT INTO t (cols) VALUES (...), (...); and INSERT INTO t VALUES (...);
-  const insertRx = /INSERT\s+INTO\s+(?:`([^`]+)`|"([^"]+)"|'([^']+)'|(\w+))\s*(?:\(([^)]+)\))?\s*VALUES\s*([\s\S]+?)(?=;)/gi;
-  while ((m = insertRx.exec(sql)) !== null) {
-    const tName = (m[1] || m[2] || m[3] || m[4]).trim();
-    const colDef = m[5];
-    const valBlock = m[6];
-    if (!tables[tName]) tables[tName] = { columns: [], rows: [], types: {} };
-    if (colDef && tables[tName].columns.length === 0) {
-      tables[tName].columns = colDef.split(',').map(c => c.trim().replace(/[`"']/g, ''));
-    }
-    // Parse all value groups
-    const rows = parseValueBlock(valBlock);
-    tables[tName].rows.push(...rows);
-  }
-
-  const keys = Object.keys(tables);
-  if (!keys.length) throw new Error('لم يتم العثور على أي جداول أو بيانات INSERT');
-
-  // Auto-generate column names if missing
-  keys.forEach(k => {
-    if (tables[k].columns.length === 0 && tables[k].rows.length > 0) {
-      const width = tables[k].rows[0].length;
-      tables[k].columns = Array.from({ length: width }, (_, i) => `col_${i + 1}`);
-    }
-  });
-
+  const keys=Object.keys(tables);
+  if(!keys.length)throw new Error('لم يتم العثور على جداول أو بيانات INSERT');
+  keys.forEach(k=>{if(tables[k].columns.length===0&&tables[k].rows.length>0){const w=tables[k].rows[0].length;tables[k].columns=Array.from({length:w},(_,i)=>`col_${i+1}`);}});
   return tables;
 }
-
-function parseCols(body) {
-  const lines = body.split('\n').map(l => l.trim().replace(/,$/, '').trim());
-  return lines
-    .filter(l => l && !/^(PRIMARY\s+KEY|UNIQUE|INDEX|KEY|CONSTRAINT|CHECK|FOREIGN\s+KEY)/i.test(l))
-    .map(l => {
-      const tok = l.match(/^(?:`([^`]+)`|"([^"]+)"|'([^']+)'|([A-Za-z_]\w*))/);
-      return tok ? (tok[1] || tok[2] || tok[3] || tok[4]) : null;
-    })
+function parseCols(body){
+  return body.split('\n').map(l=>l.trim().replace(/,$/,'').trim())
+    .filter(l=>l&&!/^(PRIMARY\s+KEY|UNIQUE|INDEX|KEY\b|CONSTRAINT|CHECK|FOREIGN\s+KEY)/i.test(l))
+    .map(l=>{const t=l.match(/^(?:`([^`]+)`|"([^"]+)"|'([^']+)'|([A-Za-z_]\w*))/);return t?(t[1]||t[2]||t[3]||t[4]):null;})
     .filter(Boolean);
 }
-
-function parseColTypes(body) {
-  const types = {};
-  const lines = body.split('\n').map(l => l.trim().replace(/,$/, '').trim());
-  lines.forEach(l => {
-    if (!l || /^(PRIMARY|UNIQUE|INDEX|KEY|CONSTRAINT|CHECK|FOREIGN)/i.test(l)) return;
-    const tok = l.match(/^(?:`([^`]+)`|"([^"]+)"|'([^']+)'|(\w+))\s+(\w+)/);
-    if (tok) {
-      const col = tok[1] || tok[2] || tok[3] || tok[4];
-      const type = (tok[5] || '').toUpperCase();
-      types[col] = type;
-    }
-  });
-  return types;
-}
-
-function parseValueBlock(block) {
-  // State machine to correctly parse nested strings and parentheses
-  const rows = [];
-  let depth = 0, inStr = false, strChar = '', cur = '', inRow = false;
-
-  for (let i = 0; i < block.length; i++) {
-    const c = block[i];
-    const prev = i > 0 ? block[i - 1] : '';
-
-    if (inStr) {
-      if (c === strChar && prev !== '\\') { inStr = false; cur += c; }
-      else cur += c;
-      continue;
-    }
-    if (c === "'" || c === '"') { inStr = true; strChar = c; cur += c; continue; }
-    if (c === '(') {
-      depth++;
-      if (depth === 1) { inRow = true; cur = ''; continue; }
-      cur += c; continue;
-    }
-    if (c === ')') {
-      depth--;
-      if (depth === 0 && inRow) { rows.push(parseRowValues(cur)); cur = ''; inRow = false; continue; }
-      cur += c; continue;
-    }
-    if (inRow) cur += c;
+function parseValBlock(block){
+  const rows=[];let depth=0,inStr=false,sc='',cur='',inRow=false;
+  for(let i=0;i<block.length;i++){
+    const c=block[i],prev=i>0?block[i-1]:'';
+    if(inStr){if(c===sc&&prev!=='\\'){inStr=false;cur+=c;}else cur+=c;continue;}
+    if(c==="'"||c==='"'){inStr=true;sc=c;cur+=c;continue;}
+    if(c==='('){depth++;if(depth===1){inRow=true;cur='';continue;}cur+=c;continue;}
+    if(c===')'){depth--;if(depth===0&&inRow){rows.push(parseRowVals(cur));cur='';inRow=false;continue;}cur+=c;continue;}
+    if(inRow)cur+=c;
   }
   return rows;
 }
-
-function parseRowValues(str) {
-  const vals = [];
-  let cur = '', inStr = false, strChar = '';
-  for (let i = 0; i < str.length; i++) {
-    const c = str[i];
-    if (inStr) {
-      if (c === strChar && str[i - 1] !== '\\') { inStr = false; }
-      else cur += c;
-      continue;
-    }
-    if (c === "'" || c === '"') { inStr = true; strChar = c; continue; }
-    if (c === ',') { vals.push(castValue(cur.trim())); cur = ''; continue; }
-    cur += c;
+function parseRowVals(str){
+  const vals=[];let cur='',inStr=false,sc='';
+  for(let i=0;i<str.length;i++){
+    const c=str[i];
+    if(inStr){if(c===sc&&str[i-1]!=='\\')inStr=false;else cur+=c;continue;}
+    if(c==="'"||c==='"'){inStr=true;sc=c;continue;}
+    if(c===','){vals.push(cast(cur.trim()));cur='';continue;}
+    cur+=c;
   }
-  if (cur.trim() !== '' || vals.length > 0) vals.push(castValue(cur.trim()));
+  if(cur.trim()!==''||vals.length>0)vals.push(cast(cur.trim()));
   return vals;
 }
-
-function castValue(v) {
-  if (v === '' || v.toUpperCase() === 'NULL') return null;
-  if (v.toUpperCase() === 'TRUE') return true;
-  if (v.toUpperCase() === 'FALSE') return false;
-  if (!isNaN(v) && v !== '') return Number(v);
+function cast(v){
+  if(v===''||v.toUpperCase()==='NULL')return null;
+  if(v.toUpperCase()==='TRUE')return true;
+  if(v.toUpperCase()==='FALSE')return false;
+  if(!isNaN(v)&&v!=='')return Number(v);
   return v;
 }
-
-/* ===================== PREVIEW ===================== */
-function showPreview(tables) {
-  const names = Object.keys(tables);
-  document.getElementById('tagsBox').innerHTML = names.map(n =>
-    `<span class="table-tag">${n}</span>`
-  ).join('');
-  const totalRows = names.reduce((s, n) => s + tables[n].rows.length, 0);
-  const totalCols = names.reduce((s, n) => s + tables[n].columns.length, 0);
-  document.getElementById('sT').textContent = names.length;
-  document.getElementById('sR').textContent = totalRows.toLocaleString('ar-IQ');
-  document.getElementById('sC').textContent = totalCols;
-  document.getElementById('statsRow').style.display = 'grid';
-  document.getElementById('tablesCard').style.display = 'block';
-  document.getElementById('optionsCard').style.display = 'block';
-  document.getElementById('cvtBtn').style.display = 'flex';
+function showPreview(t){
+  const names=Object.keys(t);
+  document.getElementById('tagsBox').innerHTML=names.map(n=>`<span class="tbl-tag">${n}</span>`).join('');
+  const tr=names.reduce((s,n)=>s+t[n].rows.length,0),tc=names.reduce((s,n)=>s+t[n].columns.length,0);
+  document.getElementById('sT').textContent=names.length;
+  document.getElementById('sR').textContent=tr.toLocaleString('ar-IQ');
+  document.getElementById('sC').textContent=tc;
+  document.getElementById('statsRow').style.display='grid';
+  document.getElementById('tablesCard').style.display='block';
+  document.getElementById('optCard').style.display='block';
+  document.getElementById('cvtBtn').style.display='flex';
 }
-
-/* ===================== CONVERT ===================== */
-function doConvert() {
-  if (!parsed) return;
-  const btn = document.getElementById('cvtBtn');
-  btn.disabled = true;
-  const useFreeze = document.getElementById('togFreeze').classList.contains('on');
-  const useFilter = document.getElementById('togFilter').classList.contains('on');
-  const useColors = document.getElementById('togColors').classList.contains('on');
-
-  document.getElementById('progCard').style.display = 'block';
-  document.getElementById('sheetsCard').style.display = 'none';
-  document.getElementById('successCard').style.display = 'none';
-  document.getElementById('errCard').style.display = 'none';
-
-  // Use setTimeout to allow UI to update before heavy processing
-  setTimeout(() => {
-    try {
-      setProgress(10, 'إنشاء مصنف Excel...', '—');
-      const wb = XLSX.utils.book_new();
-      wb.Props = { Title: currentName, Author: 'SQL→Excel Converter', CreatedDate: new Date() };
-      const names = Object.keys(parsed);
-      const sheetsMeta = [];
-
-      names.forEach((tName, idx) => {
-        setProgress(10 + Math.round((idx / names.length) * 75), `معالجة الجدول: ${tName}`, tName);
-        const { columns, rows } = parsed[tName];
-
-        // Build AOA (array of arrays) - header first
-        const headerRow = columns.length > 0 ? columns : (rows[0] ? rows[0].map((_, i) => `col_${i + 1}`) : ['col_1']);
-        const aoa = [headerRow, ...rows];
-
-        const ws = XLSX.utils.aoa_to_sheet(aoa);
-        const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
-
-        // ── Column Widths (auto-fit based on content) ──
-        const colWidths = headerRow.map((h, ci) => {
-          const maxContentLen = Math.max(
-            String(h || '').length,
-            ...rows.slice(0, 200).map(r => String(r[ci] ?? '').length)
-          );
-          return { wch: Math.min(Math.max(maxContentLen + 3, 8), 50) };
-        });
-        ws['!cols'] = colWidths;
-
-        // ── Row Height ──
-        ws['!rows'] = [{ hpt: 24 }]; // header row height 24pt
-
-        // ── Header Styles ──
-        const hStyle = useColors ? getHeaderStyle(idx) : {
-          font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
-          fill: { patternType: 'solid', fgColor: { rgb: '1A3C5E' } },
-          alignment: { horizontal: 'center', vertical: 'center' },
-          border: { bottom: { style: 'medium', color: { rgb: '0F2A42' } } }
-        };
-
-        for (let c = range.s.c; c <= range.e.c; c++) {
-          const cellAddr = XLSX.utils.encode_cell({ r: 0, c });
-          if (ws[cellAddr]) ws[cellAddr].s = hStyle;
-          else ws[cellAddr] = { v: '', s: hStyle };
-        }
-
-        // ── Data Row Styles (zebra striping) ──
-        for (let r = 1; r <= range.e.r; r++) {
-          for (let c = range.s.c; c <= range.e.c; c++) {
-            const cellAddr = XLSX.utils.encode_cell({ r, c });
-            const dStyle = getDataStyle(r);
-            if (ws[cellAddr]) ws[cellAddr].s = dStyle;
-            else ws[cellAddr] = { v: null, s: dStyle };
-          }
-        }
-
-        // ── Freeze Pane ──
-        if (useFreeze) {
-          ws['!freeze'] = { xSplit: 0, ySplit: 1, topLeftCell: 'A2', activePane: 'bottomLeft', state: 'frozen' };
-          ws['!sheetViews'] = [{ state: 'frozen', ySplit: 1, topLeftCell: 'A2' }];
-        }
-
-        // ── Auto Filter ──
-        if (useFilter && columns.length > 0) {
-          ws['!autofilter'] = { ref: ws['!ref'] };
-        }
-
-        // Safe sheet name (max 31 chars, no special chars)
-        const safeSheetName = tName.replace(/[:\\\/\?\*\[\]]/g, '_').substring(0, 31);
-        XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
-        sheetsMeta.push({ name: safeSheetName, rows: rows.length, cols: columns.length });
+function getHdrStyle(idx){
+  const[bg,fg]=PASTEL[idx%PASTEL.length];
+  return{font:{bold:true,color:{rgb:fg},sz:11},fill:{patternType:'solid',fgColor:{rgb:bg}},alignment:{horizontal:'center',vertical:'center'},border:{bottom:{style:'medium',color:{rgb:fg}},top:{style:'hair',color:{rgb:bg}},left:{style:'hair',color:{rgb:bg}},right:{style:'hair',color:{rgb:bg}}}};
+}
+function getDataStyle(ri){
+  return{fill:{patternType:'solid',fgColor:{rgb:ri%2===0?'FFFFFF':'F4F7FA'}},border:{bottom:{style:'hair',color:{rgb:'D4DDE6'}},left:{style:'hair',color:{rgb:'D4DDE6'}},right:{style:'hair',color:{rgb:'D4DDE6'}}},alignment:{vertical:'center'}};
+}
+function doConvert(){
+  if(!parsed)return;
+  const btn=document.getElementById('cvtBtn');btn.disabled=true;
+  const useFreeze=document.getElementById('togFreeze').classList.contains('on');
+  const useFilter=document.getElementById('togFilter').classList.contains('on');
+  document.getElementById('progCard').style.display='block';
+  ['sheetsCard','successCard','errCard'].forEach(id=>document.getElementById(id).style.display='none');
+  setTimeout(()=>{
+    try{
+      setP(10,'إنشاء مصنف Excel...','—');
+      const wb=XLSX.utils.book_new();
+      wb.Props={Title:curName,Author:'DataConvert Pro',CreatedDate:new Date()};
+      const names=Object.keys(parsed);const shMeta=[];
+      names.forEach((tName,idx)=>{
+        setP(10+Math.round(idx/names.length*75),`معالجة: ${tName}`,tName);
+        const{columns,rows}=parsed[tName];
+        const hdr=columns.length>0?columns:(rows[0]?rows[0].map((_,i)=>`col_${i+1}`):[]);
+        const aoa=[hdr,...rows];
+        const ws=XLSX.utils.aoa_to_sheet(aoa);
+        const rng=XLSX.utils.decode_range(ws['!ref']||'A1');
+        ws['!cols']=hdr.map((h,ci)=>({wch:Math.min(Math.max(String(h||'').length,...rows.slice(0,200).map(r=>String(r[ci]??'').length))+3,50)}));
+        ws['!rows']=[{hpt:22}];
+        const hStyle=getHdrStyle(idx);
+        for(let c=rng.s.c;c<=rng.e.c;c++){const a=XLSX.utils.encode_cell({r:0,c});if(ws[a])ws[a].s=hStyle;else ws[a]={v:'',s:hStyle};}
+        for(let r=1;r<=rng.e.r;r++)for(let c=rng.s.c;c<=rng.e.c;c++){const a=XLSX.utils.encode_cell({r,c});const ds=getDataStyle(r);if(ws[a])ws[a].s=ds;else ws[a]={v:null,s:ds};}
+        if(useFreeze)ws['!sheetViews']=[{state:'frozen',ySplit:1,topLeftCell:'A2'}];
+        if(useFilter&&hdr.length>0)ws['!autofilter']={ref:ws['!ref']};
+        const sn=tName.replace(/[:\\\/\?\*\[\]]/g,'_').substring(0,31);
+        XLSX.utils.book_append_sheet(wb,ws,sn);
+        shMeta.push({name:sn,rows:rows.length,cols:columns.length});
       });
-
-      setProgress(90, 'كتابة الملف...', 'xlsx output');
-
-      // Write with cellStyles enabled
-      const output = XLSX.write(wb, { bookType: 'xlsx', type: 'array', cellStyles: true, compression: true });
-      xlsxBlob = new Blob([output], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-      setProgress(100, 'اكتمل!', '✓ جاهز');
-
-      const totalRows = Object.values(parsed).reduce((s, t) => s + t.rows.length, 0);
-      const entry = { name: currentName + '.xlsx', sheets: names.length, rows: totalRows, date: new Date().toLocaleDateString('ar-IQ'), blob: xlsxBlob };
-      history.unshift(entry);
-
-      const badge = document.getElementById('histBadge');
-      badge.textContent = history.length;
-      badge.style.display = 'inline-block';
-
-      setTimeout(() => {
-        document.getElementById('progCard').style.display = 'none';
-        showSheets(sheetsMeta);
-        document.getElementById('successMsg').textContent = `${names.length} شيت  •  ${totalRows.toLocaleString('ar-IQ')} صف`;
-        document.getElementById('successCard').style.display = 'block';
-        const url = URL.createObjectURL(xlsxBlob);
-        document.getElementById('dlBtn').onclick = () => {
-          const a = document.createElement('a');
-          a.href = url; a.download = currentName + '.xlsx'; a.click();
-        };
-        btn.disabled = false;
-      }, 400);
-
-    } catch (ex) {
-      showErr('خطأ أثناء التحويل: ' + ex.message);
-      btn.disabled = false;
-      document.getElementById('progCard').style.display = 'none';
-    }
-  }, 60);
+      setP(90,'كتابة الملف...','xlsx output');
+      const out=XLSX.write(wb,{bookType:'xlsx',type:'array',cellStyles:true,compression:true});
+      xlsxBlob=new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      setP(100,'اكتمل!','✓');
+      const totalR=Object.values(parsed).reduce((s,t)=>s+t.rows.length,0);
+      hist.unshift({name:curName+'.xlsx',sheets:names.length,rows:totalR,date:new Date().toLocaleDateString('ar-IQ'),blob:xlsxBlob});
+      setTimeout(()=>{
+        document.getElementById('progCard').style.display='none';
+        showSheets(shMeta);
+        document.getElementById('successMsg').textContent=`${names.length} شيت  •  ${totalR.toLocaleString('ar-IQ')} صف`;
+        document.getElementById('successCard').style.display='block';
+        const url=URL.createObjectURL(xlsxBlob);
+        document.getElementById('dlBtn').onclick=()=>{const a=document.createElement('a');a.href=url;a.download=curName+'.xlsx';a.click();};
+        btn.disabled=false;
+      },350);
+    }catch(ex){showErr('خطأ: '+ex.message);btn.disabled=false;document.getElementById('progCard').style.display='none';}
+  },60);
 }
-
-function showSheets(items) {
-  document.getElementById('sheetsList').innerHTML = items.map((s, i) => {
-    const [bg] = PASTEL_POOL[i % PASTEL_POOL.length];
-    return `<div class="sheet-item">
-      <div class="sheet-dot" style="background:#${bg};border:2px solid rgba(0,0,0,.1)"></div>
-      <div class="sheet-name">${s.name}</div>
-      <span class="sheet-cols">${s.cols} عمود</span>
-      <span class="sheet-rows">${s.rows.toLocaleString('ar-IQ')} صف</span>
-    </div>`;
+function showSheets(items){
+  document.getElementById('sheetsList').innerHTML=items.map((s,i)=>{
+    const[bg]=PASTEL[i%PASTEL.length];
+    return`<div class="sh-row"><div class="sh-dot" style="background:#${bg}"></div><div class="sh-name">${s.name}</div><span class="sh-meta">${s.cols} عمود  •  ${s.rows.toLocaleString('ar-IQ')} صف</span></div>`;
   }).join('');
-  document.getElementById('sheetsCard').style.display = 'block';
+  document.getElementById('sheetsCard').style.display='block';
 }
-
-function setProgress(pct, label, step) {
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progLabel').textContent = label;
-  document.getElementById('progPct').textContent = pct + '%';
-  document.getElementById('progStep').textContent = step;
+function setP(v,l,s){document.getElementById('progFill').style.width=v+'%';document.getElementById('progLbl').textContent=l;document.getElementById('progPct').textContent=v+'%';document.getElementById('progStep').textContent=s;}
+function showErr(m){const e=document.getElementById('errCard');e.innerHTML='⚠ '+m;e.style.display='block';}
+function hideRes(){['statsRow','tablesCard','optCard','progCard','sheetsCard','successCard','errCard'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});document.getElementById('cvtBtn').style.display='none';parsed=null;xlsxBlob=null;}
+function resetAll(){uc.classList.remove('has-file');document.getElementById('sqlFile').value='';hideRes();}
+function fmtSz(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
+function renderHist(){
+  const list=document.getElementById('histList');
+  const empty=document.getElementById('histEmpty');
+  const tb=document.getElementById('histToolbar');
+  if(!hist.length){empty.style.display='flex';tb.style.display='none';list.innerHTML='';return;}
+  empty.style.display='none';tb.style.display='flex';
+  document.getElementById('histCnt').textContent=hist.length+' ملف محوّل';
+  list.innerHTML=hist.map((h,i)=>`<div class="hi-item"><div class="hi-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div><div class="hi-meta"><div class="hi-name">${h.name}</div><div class="hi-info">${h.sheets} شيت  •  ${h.rows.toLocaleString('ar-IQ')} صف  •  ${h.date}</div></div><div class="hi-dl-btn" onclick="reDl(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div></div>`).join('');
 }
-
-function showErr(msg) {
-  const el = document.getElementById('errCard');
-  el.innerHTML = '<span class="err-icon">⚠</span> ' + msg;
-  el.style.display = 'block';
-}
-
-function hideResults() {
-  ['statsRow', 'tablesCard', 'optionsCard', 'progCard', 'sheetsCard', 'successCard', 'errCard'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  document.getElementById('cvtBtn').style.display = 'none';
-  parsed = null; xlsxBlob = null;
-}
-
-function resetAll() {
-  document.getElementById('fileStrip').style.display = 'none';
-  document.getElementById('sqlFile').value = '';
-  document.getElementById('uploadCard').classList.remove('has-file');
-  hideResults();
-}
-
-function fmtSize(b) {
-  if (b < 1024) return b + ' B';
-  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
-  return (b / 1048576).toFixed(1) + ' MB';
-}
-
-/* ===================== HISTORY ===================== */
-function renderHistory() {
-  const list = document.getElementById('histList');
-  const empty = document.getElementById('histEmpty');
-  const toolbar = document.getElementById('histToolbar');
-  if (!history.length) {
-    empty.style.display = 'flex';
-    toolbar.style.display = 'none';
-    list.innerHTML = '';
-    return;
-  }
-  empty.style.display = 'none';
-  toolbar.style.display = 'flex';
-  document.getElementById('histCountTxt').textContent = history.length + ' ملف محوّل';
-  list.innerHTML = history.map((h, i) => `
-    <div class="hist-item">
-      <div class="hist-file-icon">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <line x1="3" y1="9" x2="21" y2="9"/>
-          <line x1="3" y1="15" x2="21" y2="15"/>
-          <line x1="12" y1="3" x2="12" y2="21"/>
-        </svg>
-      </div>
-      <div class="hist-meta">
-        <div class="hist-name">${h.name}</div>
-        <div class="hist-info">${h.sheets} شيت  •  ${h.rows.toLocaleString('ar-IQ')} صف  •  ${h.date}</div>
-      </div>
-      <div class="hist-dl-btn" onclick="reDownload(${i})" title="تحميل">
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-      </div>
-    </div>`).join('');
-}
-
-function reDownload(i) {
-  const h = history[i];
-  const url = URL.createObjectURL(h.blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = h.name; a.click();
-}
-
-function clearHistory() {
-  history.length = 0;
-  document.getElementById('histBadge').style.display = 'none';
-  renderHistory();
-}
+function reDl(i){const h=hist[i];const a=document.createElement('a');a.href=URL.createObjectURL(h.blob);a.download=h.name;a.click();}
+function clearHist(){hist.length=0;renderHist();}
 </script>
-</body>
-</html>
